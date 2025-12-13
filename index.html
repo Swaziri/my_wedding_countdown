@@ -28,6 +28,7 @@
             max-width: 700px;
             width: 90%;
             border: 1px solid #eee;
+            position: relative;
         }
 
         .intro {
@@ -40,8 +41,8 @@
 
         /* Wedding Names Style */
         h1 {
-            font-family: 'Great Vibes', cursive; /* Elegant script font */
-            color: #d63384; /* Wedding Pink */
+            font-family: 'Great Vibes', cursive;
+            color: #d63384;
             margin: 0;
             font-size: 3.2rem;
             line-height: 1.2;
@@ -82,6 +83,7 @@
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
+            margin-bottom: 30px;
         }
 
         .time-box {
@@ -108,14 +110,98 @@
             margin-top: 5px;
         }
 
-        /* Prayer Footnote Style */
-        .prayer-footnote {
-            margin-top: 40px;
+        /* Button Style */
+        .dua-btn {
+            background-color: #d63384;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
             font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+        }
+
+        .dua-btn:hover {
+            background-color: #b02a6c;
+            transform: translateY(-2px);
+        }
+
+        .prayer-footnote {
+            margin-top: 30px;
+            font-size: 0.9rem;
             color: #666;
             font-style: italic;
             border-top: 1px dashed #ddd;
             padding-top: 20px;
+        }
+
+        /* MODAL (POPUP) STYLES */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);} 
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .dua-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #444;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .dua-title {
+            color: #d63384;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         /* Mobile Responsive Design */
@@ -125,13 +211,14 @@
             .time-box { min-width: 65px; padding: 10px; }
             .number { font-size: 1.8rem; }
             .label { font-size: 0.6rem; }
+            .modal-content { margin: 30% auto; width: 85%; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <p class="intro">Countdown to the Wedding of</p>
+        <p class="intro">The Wedding of</p>
 
         <h1>Muhammad Sanusi Waziri</h1>
         <span class="ampersand">&</span>
@@ -139,7 +226,7 @@
         
         <p class="in-sha-allah">In Sha Allah</p>
         
-        <p class="details">Friday, October 30, 2026 &bull; 10:00 AM</p>
+        <p class="details">October 30, 2026 &bull; 11:00 AM</p>
         
         <div class="countdown" id="countdown">
             <div class="time-box">
@@ -160,12 +247,28 @@
             </div>
         </div>
 
+        <button class="dua-btn" onclick="openModal()">Click to Pray for Us</button>
+
         <p class="prayer-footnote">Please include us in your prayers</p>
     </div>
 
+    <div id="duaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 class="dua-title">A Prayer for the Couple</h2>
+            <p class="dua-text">
+                "O Allah, bless the union of <strong>Muhammad and Husaina</strong> with Your infinite Mercy. 
+                Place between <strong>their hearts</strong> love and compassion. 
+                Make <strong>them</strong> the coolness of each other's eyes and grant <strong>them</strong> righteous offspring. 
+                Protect <strong>their home</strong> from envy and harm, and guide <strong>them</strong> on the straight path together until Jannah.<br> 
+                <strong>Ameen.</strong>"
+            </p>
+        </div>
+    </div>
+
     <script>
-        // Set the wedding date: Oct 30, 2026, at 10:00 AM
-        const countDownDate = new Date("October 30, 2026 10:00:00").getTime();
+        // Set the wedding date: Oct 30, 2026, at 11:00 AM
+        const countDownDate = new Date("October 30, 2026 11:00:00").getTime();
 
         const x = setInterval(function() {
             const now = new Date().getTime();
@@ -186,11 +289,29 @@
                 document.getElementById("countdown").innerHTML = "<h2>Alhamdulillah! It's Our Wedding Day!</h2>";
             }
         }, 1000);
+
+        // --- MODAL FUNCTIONS ---
+        
+        // Get the modal
+        var modal = document.getElementById("duaModal");
+
+        // Function to open the modal
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 
 </body>
 </html>
-
-
-
-
