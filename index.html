@@ -1,3 +1,15 @@
+Here is the updated code.
+
+I have added two new features:
+
+1.  **Percentage Progress Tracker:** A bar and a percentage number (with decimals) that shows exactly how far along you are from your engagement (today, Dec 14, 2025) to the wedding.
+2.  **Milliseconds:** I added a "Milliseconds" box. *Note: Web browsers can only track time accurately down to milliseconds (1/1000th of a second), not nanoseconds. I have enabled milliseconds, which move very fast\!*
+
+### **Updated Code (`index.html`)**
+
+Replace your entire file with this code:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,11 +34,11 @@
 
         .container {
             background: white;
-            padding: 50px 40px;
+            padding: 40px 30px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            max-width: 700px;
-            width: 90%;
+            max-width: 800px;
+            width: 95%;
             border: 1px solid #eee;
             position: relative;
         }
@@ -36,7 +48,7 @@
             letter-spacing: 3px;
             font-size: 0.9rem;
             color: #888;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         /* Wedding Names Style */
@@ -44,7 +56,7 @@
             font-family: 'Great Vibes', cursive;
             color: #d63384;
             margin: 0;
-            font-size: 3.2rem;
+            font-size: 3rem;
             line-height: 1.2;
         }
 
@@ -52,38 +64,39 @@
             font-size: 1.5rem;
             color: #888;
             display: block;
-            margin: 5px 0;
+            margin: 0px 0;
             font-family: 'Poppins', sans-serif;
         }
 
         .in-sha-allah {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #2c3e50;
-            margin-top: 15px;
-            margin-bottom: 25px;
+            margin-top: 10px;
+            margin-bottom: 20px;
             font-style: italic;
         }
 
         p.details {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #555;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 2px;
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
-            padding: 15px 0;
+            padding: 10px 0;
             display: inline-block;
             width: 100%;
         }
 
+        /* Countdown Box Styling */
         .countdown {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .time-box {
@@ -91,37 +104,69 @@
             flex-direction: column;
             align-items: center;
             background: #f9f9f9;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
-            min-width: 80px;
+            min-width: 70px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .number {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 600;
             color: #2c3e50;
         }
 
+        /* Milliseconds specific color to make it look fast */
+        #milliseconds {
+            color: #d63384;
+            min-width: 60px;
+        }
+
         .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             color: #888;
             margin-top: 5px;
+        }
+
+        /* PROGRESS BAR STYLES */
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 50px;
+            margin: 20px 0 10px 0;
+            height: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #d63384, #ff8da1);
+            border-radius: 50px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
         /* Button Style */
         .dua-btn {
             background-color: #d63384;
             color: white;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
             border-radius: 50px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: background 0.3s ease;
             font-family: 'Poppins', sans-serif;
-            margin-top: 10px;
+            margin-top: 5px;
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
         }
 
@@ -131,102 +176,42 @@
         }
 
         .prayer-footnote {
-            margin-top: 30px;
-            font-size: 0.9rem;
+            margin-top: 25px;
+            font-size: 0.85rem;
             color: #666;
             font-style: italic;
             border-top: 1px dashed #ddd;
-            padding-top: 20px;
+            padding-top: 15px;
         }
 
-        /* MODAL (POPUP) STYLES */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; 
-            z-index: 100; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
-            backdrop-filter: blur(5px);
-        }
+        /* MODAL STYLES */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 30px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 15px; text-align: center; position: relative; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; position: absolute; right: 20px; top: 10px; cursor: pointer; }
+        .close:hover, .close:focus { color: #000; text-decoration: none; cursor: pointer; }
+        .dua-text { font-size: 1.1rem; line-height: 1.8; color: #444; font-style: italic; margin-top: 10px; }
+        .dua-title { color: #d63384; font-family: 'Great Vibes', cursive; font-size: 2.2rem; margin-bottom: 10px; }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; 
-            padding: 30px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 15px;
-            text-align: center;
-            position: relative;
-            animation: fadeIn 0.4s;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(-20px);} 
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            right: 20px;
-            top: 10px;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .dua-text {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #444;
-            font-style: italic;
-            margin-top: 10px;
-        }
-
-        .dua-title {
-            color: #d63384;
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        /* Mobile Responsive Design */
+        /* Mobile Responsive */
         @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            .countdown { gap: 10px; }
-            .time-box { min-width: 65px; padding: 10px; }
-            .number { font-size: 1.8rem; }
-            .label { font-size: 0.6rem; }
-            .modal-content { margin: 30% auto; width: 85%; }
+            h1 { font-size: 2rem; }
+            .countdown { gap: 8px; }
+            .time-box { min-width: 55px; padding: 8px; }
+            .number { font-size: 1.4rem; }
+            .label { font-size: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <p class="intro">Count Down to The Wedding of</p>
-
+        <p class="intro">The Wedding of</p>
         <h1>Muhammad Sanusi Waziri</h1>
         <span class="ampersand">&</span>
         <h1>Husaina Abubakar Runka</h1>
-        
         <p class="in-sha-allah">In Sha Allah</p>
-        
-        <p class="details">October 30, 2026 &bull; 10:00 AM</p>
+        <p class="details">October 30, 2026 &bull; 11:00 AM</p>
         
         <div class="countdown" id="countdown">
             <div class="time-box">
@@ -239,16 +224,24 @@
             </div>
             <div class="time-box">
                 <span class="number" id="minutes">00</span>
-                <span class="label">Minutes</span>
+                <span class="label">Mins</span>
             </div>
             <div class="time-box">
                 <span class="number" id="seconds">00</span>
-                <span class="label">Seconds</span>
+                <span class="label">Secs</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="milliseconds">000</span>
+                <span class="label">MS</span>
             </div>
         </div>
 
-        <button class="dua-btn" onclick="openModal()">Click to Pray for Us</button>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">0.000000% Completed</div>
 
+        <button class="dua-btn" onclick="openModal()">Click to Pray for Us</button>
         <p class="prayer-footnote">Please include us in your prayers</p>
     </div>
 
@@ -267,53 +260,69 @@
     </div>
 
     <script>
-        // Set the wedding date: Oct 30, 2026, at 10:00 AM
-        const countDownDate = new Date("October 30, 2026 10:00:00").getTime();
+        // CONFIGURATION
+        // Wedding Date: Oct 30, 2026, 11:00 AM
+        const countDownDate = new Date("October 30, 2026 11:00:00").getTime();
+        
+        // Engagement Date (Start of Progress): December 14, 2025
+        const startDate = new Date("December 14, 2025 00:00:00").getTime();
 
+        // Update the count down every 10 milliseconds for smooth millisecond effect
         const x = setInterval(function() {
+
+            // Get current time
             const now = new Date().getTime();
+
+            // 1. CALCULATE COUNTDOWN
             const distance = countDownDate - now;
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            const milliseconds = Math.floor((distance % 1000)); // Get milliseconds
 
+            // Display Countdown
             document.getElementById("days").innerText = days;
             document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
             document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
             document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+            // Pad milliseconds to always be 3 digits (e.g. 005)
+            document.getElementById("milliseconds").innerText = milliseconds.toString().padStart(3, '0');
 
+            // 2. CALCULATE PERCENTAGE
+            const totalDuration = countDownDate - startDate;
+            const timeElapsed = now - startDate;
+            
+            // Calculate percentage (0 to 100)
+            let percentage = (timeElapsed / totalDuration) * 100;
+            
+            // Sanity check limits
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            // Update Progress Bar Width
+            document.getElementById("progressBar").style.width = percentage + "%";
+            
+            // Update Text (with 5 decimal places to show movement)
+            document.getElementById("progressText").innerText = percentage.toFixed(6) + "% Journey Completed";
+
+            // If finished
             if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "<h2>Alhamdulillah! It's Our Wedding Day!</h2>";
+                document.getElementById("progressText").innerText = "100% Completed";
+                document.getElementById("progressBar").style.width = "100%";
             }
-        }, 1000);
+        }, 30); // Update every 30ms
 
-        // --- MODAL FUNCTIONS ---
-        
-        // Get the modal
+        // MODAL LOGIC
         var modal = document.getElementById("duaModal");
-
-        // Function to open the modal
-        function openModal() {
-            modal.style.display = "block";
-        }
-
-        // Function to close the modal
-        function closeModal() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        function openModal() { modal.style.display = "block"; }
+        function closeModal() { modal.style.display = "none"; }
+        window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; } }
     </script>
 
 </body>
 </html>
-
-
+```
